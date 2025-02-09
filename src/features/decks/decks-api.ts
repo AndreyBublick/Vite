@@ -17,10 +17,10 @@ export const decksAPI = {
     })
   },
   deleteDeck(id: string) {
-    return instance.delete<Deck>(`v1/decks/${id}`)
+    return instance.delete<ResponseDeleteDeck>(`v1/decks/${id}`)
   },
-  updateDeck({ id }: UpdateDeckParams) {
-    return instance.patch<ResponseDeleteDeck>(`v1/decks/${id}`)
+  updateDeck({ id, name }: UpdateDeckParams) {
+    return instance.patch<Deck>(`v1/decks/${id}`, { name })
   },
 }
 

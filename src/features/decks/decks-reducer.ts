@@ -1,8 +1,9 @@
-import type { Deck } from './decks-api.ts'
+import type { Deck, UpdateDeckParams } from './decks-api.ts'
 
 const SET_DECKS = 'SET_DECKS'
 const ADD_DECK = 'ADD_DECK'
 const DELETE_DECK = 'DELETE_DECK'
+const UPDATE_DECK = 'UPDATE_DECK'
 const initialState = {
   decks: [] as Deck[], // todo: add type
   searchParams: {
@@ -22,6 +23,11 @@ export const decksReducer = (state: DecksState = initialState, action: DecksActi
     }
     case DELETE_DECK: {
       return {...state,decks: state.decks.filter(deck=>deck.id!==action.payload.id)}
+    }
+    case UPDATE_DECK: {
+      const {id,name} = action.payload;
+      console.log(action.payload)
+      return  {...state,decks: state.decks.map(deck=>deck.id===id ? {...deck,name} : deck)}
     }
 
     default:
@@ -44,4 +50,11 @@ export const deleteDeckAC = (id:string) => ({
   payload: { id },
 } as const)
 
-type DecksActions = ReturnType<typeof setDecksAC> | ReturnType<typeof addDeckAC> | ReturnType<typeof deleteDeckAC>
+
+export const updateDeckAC = (payload: UpdateDeckParams) =>({
+  type: UPDATE_DECK,
+  payload,
+} as const);
+
+
+type DecksActions = ReturnType<typeof setDecksAC> | ReturnType<typeof addDeckAC> | ReturnType<typeof deleteDeckAC> | ReturnType<typeof updateDeckAC>;

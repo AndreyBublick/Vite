@@ -1,9 +1,10 @@
 import s from './DeckItem.module.css'
 import type { Deck } from '../../decks-api.ts'
 import { useAppDispatch, useAppSelector } from '../../../../app/store.ts'
-import { useCallback } from 'react'
-import { deleteDeckTC } from '../../decks-thunks.ts'
+import { useCallback, useState } from 'react'
+import { deleteDeckTC, updateDeckTC } from '../../decks-thunks.ts'
 import { getAppProgress } from '../../../../app/app-selectors.ts'
+import type { Progress } from '../../../../app/app-reducer.ts'
 
 type DeckProps = {
   deck: Deck // todo: fix
@@ -13,13 +14,23 @@ type DeckProps = {
 const TEST_ACC_NAME = 'Nik-Kik-Shpink'
 
 export const DeckItem = ({ deck }: DeckProps) => {
+
+  const [progress, setProgress] = useState<Progress>('idle');
+
   const isTestingDeck = deck.author.name === TEST_ACC_NAME
   const dispatch = useAppDispatch();
 
-  const progress = useAppSelector(getAppProgress);
 
-  const onClickHandler = useCallback(() => {
-    dispatch(deleteDeckTC(deck.id));
+
+  const handleEditButtonClick = () => {
+    setProgress('loading');
+    dispatch(updateDeckTC({ id: deck.id, name: `${deck.name} updated` })).then(()=>{setProgress('success')})
+
+  }
+
+  const handleDeleteButtonClick = useCallback(() => {
+    setProgress('loading');
+    dispatch(deleteDeckTC(deck.id)).then(()=>{setProgress('success')});
   },[deck.id,dispatch])
 
   return (
@@ -40,8 +51,8 @@ export const DeckItem = ({ deck }: DeckProps) => {
 
       {isTestingDeck && (
         <div className={s.buttonBox}>
-          <button disabled={progress==='loading'}>update</button>
-          <button disabled={progress==='loading'} onClick={onClickHandler}>delete</button>
+          <button disabled={progress==='loading'} onClick={handleEditButtonClick}>update</button>
+          <button disabled={progress==='loading'} onClick={handleDeleteButtonClick}>delete</button>
         </div>
       )}
     </li>
