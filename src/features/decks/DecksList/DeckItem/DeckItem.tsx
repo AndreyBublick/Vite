@@ -1,8 +1,9 @@
 import s from './DeckItem.module.css'
 import type { Deck } from '../../decks-api.ts'
-import { useAppDispatch } from '../../../../app/store.ts'
+import { useAppDispatch, useAppSelector } from '../../../../app/store.ts'
 import { useCallback } from 'react'
 import { deleteDeckTC } from '../../decks-thunks.ts'
+import { getAppProgress } from '../../../../app/app-selectors.ts'
 
 type DeckProps = {
   deck: Deck // todo: fix
@@ -14,6 +15,8 @@ const TEST_ACC_NAME = 'Nik-Kik-Shpink'
 export const DeckItem = ({ deck }: DeckProps) => {
   const isTestingDeck = deck.author.name === TEST_ACC_NAME
   const dispatch = useAppDispatch();
+
+  const progress = useAppSelector(getAppProgress);
 
   const onClickHandler = useCallback(() => {
     dispatch(deleteDeckTC(deck.id));
@@ -37,8 +40,8 @@ export const DeckItem = ({ deck }: DeckProps) => {
 
       {isTestingDeck && (
         <div className={s.buttonBox}>
-          <button>update</button>
-          <button onClick={onClickHandler}>delete</button>
+          <button disabled={progress==='loading'}>update</button>
+          <button disabled={progress==='loading'} onClick={onClickHandler}>delete</button>
         </div>
       )}
     </li>
