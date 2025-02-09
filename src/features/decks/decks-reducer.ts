@@ -1,5 +1,8 @@
+import type { Deck } from './decks-api.ts'
+
 const SET_DECKS = 'SET_DECKS'
-const ADD_DECK = 'ADD_DECK';
+const ADD_DECK = 'ADD_DECK'
+const DELETE_DECK = 'DELETE_DECK'
 const initialState = {
   decks: [] as Deck[], // todo: add type
   searchParams: {
@@ -12,10 +15,13 @@ type DecksState = typeof initialState
 export const decksReducer = (state: DecksState = initialState, action: DecksActions): DecksState => {
   switch (action.type) {
     case SET_DECKS: {
-      return { ...state, decks: [...state.decks, ...action.payload.decks]}
+      return { ...state, decks: [...state.decks, ...action.payload.decks] }
     }
     case ADD_DECK: {
-      return {...state, decks: [action.payload.deck,...state.decks]}
+      return { ...state, decks: [action.payload.deck, ...state.decks] }
+    }
+    case DELETE_DECK: {
+      return {...state,decks: state.decks.filter(deck=>deck.id!==action.payload.id)}
     }
 
     default:
@@ -23,31 +29,19 @@ export const decksReducer = (state: DecksState = initialState, action: DecksActi
   }
 }
 
-export const setDecksAC = (decks: Array<Deck>) => ({
-  type: SET_DECKS,
-  payload: { decks },
+export const setDecksAC = (decks: Array<Deck>) =>
+  ({
+    type: SET_DECKS,
+    payload: { decks },
+  }) as const
+export const addDeckAC = (deck: Deck) =>
+  ({
+    type: ADD_DECK,
+    payload: { deck },
+  }) as const
+export const deleteDeckAC = (id:string) => ({
+  type: DELETE_DECK,
+  payload: { id },
 } as const)
-export const addDeckAC = (deck: Deck) => ({
-  type: ADD_DECK,
-  payload: { deck },
-} as const)
 
-
-
-type DecksActions = ReturnType<typeof setDecksAC> | ReturnType<typeof addDeckAC>
-
-export type Deck = {
-  id: string
-  userId: string
-  name: string
-  isPrivate: boolean
-  cover: null
-  created: string
-  updated: string
-  cardsCount: number
-  isFavorite: false
-  author: {
-    id: string
-    name: string
-  }
-}
+type DecksActions = ReturnType<typeof setDecksAC> | ReturnType<typeof addDeckAC> | ReturnType<typeof deleteDeckAC>

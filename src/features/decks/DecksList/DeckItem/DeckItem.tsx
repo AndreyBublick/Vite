@@ -1,13 +1,23 @@
 import s from './DeckItem.module.css'
+import type { Deck } from '../../decks-api.ts'
+import { useAppDispatch } from '../../../../app/store.ts'
+import { useCallback } from 'react'
+import { deleteDeckTC } from '../../decks-thunks.ts'
 
 type DeckProps = {
-  deck: any // todo: fix
+  deck: Deck // todo: fix
 }
 
-const TEST_ACC_NAME = 'kukus'
+
+const TEST_ACC_NAME = 'Nik-Kik-Shpink'
 
 export const DeckItem = ({ deck }: DeckProps) => {
   const isTestingDeck = deck.author.name === TEST_ACC_NAME
+  const dispatch = useAppDispatch();
+
+  const onClickHandler = useCallback(() => {
+    dispatch(deleteDeckTC(deck.id));
+  },[deck.id,dispatch])
 
   return (
     <li className={s.item}>
@@ -28,7 +38,7 @@ export const DeckItem = ({ deck }: DeckProps) => {
       {isTestingDeck && (
         <div className={s.buttonBox}>
           <button>update</button>
-          <button>delete</button>
+          <button onClick={onClickHandler}>delete</button>
         </div>
       )}
     </li>

@@ -9,6 +9,7 @@ export const App = () => {
   return (
     <div>
       <div style={{ height: '4px' }}>
+
         {progress==='loading' && <LinearProgress color="secondary"  />}
 
       </div>
