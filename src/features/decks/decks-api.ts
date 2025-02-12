@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 export const instance = axios.create({
+
   baseURL: 'https://api.flashcards.andrii.es',
   headers: {
     'x-auth-skip': true,
@@ -20,6 +21,7 @@ export const decksAPI = {
     return instance.delete<ResponseDeleteDeck>(`v1/decks/${id}`)
   },
   updateDeck({ id, name }: UpdateDeckParams) {
+
     return instance.patch<Deck>(`v1/decks/${id}`, { name })
   },
 }

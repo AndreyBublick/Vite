@@ -1,9 +1,8 @@
 import s from './DeckItem.module.css'
 import type { Deck } from '../../decks-api.ts'
-import { useAppDispatch, useAppSelector } from '../../../../app/store.ts'
+import { useAppDispatch } from '../../../../app/store.ts'
 import { useCallback, useState } from 'react'
 import { deleteDeckTC, updateDeckTC } from '../../decks-thunks.ts'
-import { getAppProgress } from '../../../../app/app-selectors.ts'
 import type { Progress } from '../../../../app/app-reducer.ts'
 
 type DeckProps = {

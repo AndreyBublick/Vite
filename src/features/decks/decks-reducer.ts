@@ -26,7 +26,7 @@ export const decksReducer = (state: DecksState = initialState, action: DecksActi
     }
     case UPDATE_DECK: {
       const {id,name} = action.payload;
-      console.log(action.payload)
+
       return  {...state,decks: state.decks.map(deck=>deck.id===id ? {...deck,name} : deck)}
     }
 
